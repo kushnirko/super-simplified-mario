@@ -27,9 +27,9 @@ class DynamicLayer extends BackgroundLayer {
   }
 
   update() {
-    this.box.pos.x < -this.box.width
-      ? this.box.pos.x = 0
-      : this.box.pos.x -= this.speed;
+    const x = this.box.pos.x;
+    if (x < -this.box.width) this.box.pos.x = 0
+    else this.box.pos.x -= this.speed;
   }
 }
 
@@ -48,11 +48,10 @@ class ParallaxLayer extends BackgroundLayer {
 
 export default class Background {
   constructor(layersSrc) {
-    this.layers = layersSrc.map((layerSrc) => (
-      layerSrc.speed !== undefined
-        ? new DynamicLayer(layerSrc)
-        : new ParallaxLayer(layerSrc)
-    ));
+    this.layers = layersSrc.map((layerSrc) => {
+      const Layer = (layerSrc.speed !== undefined) ? DynamicLayer : ParallaxLayer;
+      return new Layer(layerSrc);
+    });
   }
 
   update(playerVelocityX) {
