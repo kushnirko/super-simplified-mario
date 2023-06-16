@@ -23,19 +23,19 @@ export default class Rex extends Sprite {
 
   stateUpdate() {
     const velocityHandling = new Map([
-        [ 1, 'Right' ],
-        [-1, 'Left'  ],
-        [ 0, this.currentStateName.replace(
-          `lives${ this.previousLivesValue }`, ''
-        ) ],
+      [ 1, 'Right' ],
+      [-1, 'Left'  ],
+      [ 0, this.currentStateName.replace(
+        `lives${ this.previousLivesValue }`, ''
+      ) ],
     ]);
     const nextStateName = `lives${ this.lives }`.concat(
-        velocityHandling.get(Math.sign(this.velocity.x))
+      velocityHandling.get(Math.sign(this.velocity.x))
     );
     if (nextStateName !== this.currentStateName) {
       if (this.lives !== this.previousLivesValue) {
         this.velocity.x -= Math.sign(this.velocity.x) *
-            this.maxVelocity.x * 0.5;
+          this.maxVelocity.x * 0.5;
         this.box.height -= this.box.height * 0.5;
         this.frame.drawOffset.y -= this.box.height;
         this.box.pos.y += this.box.height;
@@ -47,17 +47,16 @@ export default class Rex extends Sprite {
   }
 
   velocityUpdate() {
-    this.velocity.y += this.gravity;
-    const currentVelocityX = this.velocity.x;
+    const { box, velocity } = this;
+    velocity.y += this.gravity;
+    const currentVelocityX = velocity.x;
     const collisionChecker =
-      currentVelocityX + Math.sign(currentVelocityX) * this.box.width;
-    this.box.pos.x += collisionChecker;
+      currentVelocityX + Math.sign(currentVelocityX) * box.width;
+    box.pos.x += collisionChecker;
     const collisions = this.detectCollisions(this.tile.enemyObjs);
-    this.box.pos.x -= collisionChecker;
-    if (collisions.sides[0] !== 'bottom')
-      this.velocity.x = -currentVelocityX;
-    else
-      this.velocity.x = currentVelocityX;
+    box.pos.x -= collisionChecker;
+    if (collisions.sides[0] !== 'bottom') velocity.x = -currentVelocityX;
+    else velocity.x = currentVelocityX;
   }
 
   update(delay, tile) {

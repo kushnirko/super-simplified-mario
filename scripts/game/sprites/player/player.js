@@ -40,11 +40,12 @@ export default class Player extends Sprite {
     this.velocity.y += this.gravity;
     this.stateMachine.update(input);
 
-    if (!(this.isNearMapStart() || this.isNearMapEnd()))
+    if (!this.isNearMapStart() && !this.isNearMapEnd()) {
       this.box.pos.x += this.velocity.x;
+    }
     this.box.pos.y += this.velocity.y;
-    if (this.isUnderMapBottom())
-      this.lives = 0;
+
+    if (this.isUnderMapBottom()) this.lives = 0;
 
     this.updateFrame(delay);
   }

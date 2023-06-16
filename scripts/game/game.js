@@ -40,19 +40,22 @@ export default class Game {
   updateCamera() {
     const { player, gameMap } = this;
     this.camera.move = 0;
+    const half = 0.5
     this.camera.posX = player.box.pos.x -
-        (this.camera.width - player.box.width) * 0.5;
+        (this.camera.width - player.box.width) * half;
 
     const cameraLeftSide = this.camera.posX;
     const cameraRightSide = cameraLeftSide + this.camera.width;
     const gameBoxLeftSide = this.box.pos.x;
     const gameBoxRightSide = gameBoxLeftSide + this.box.width;
 
-    if (cameraLeftSide <= 0 ||
-        cameraRightSide >= gameMap.levelLength)
-      return;
-    if (cameraLeftSide <= gameBoxLeftSide ||
-        cameraRightSide >= gameBoxRightSide) {
+    const isImpossiblePanLeft = cameraLeftSide <= 0;
+    const isImpossiblePanRight = cameraRightSide >= gameMap.levelLength;
+    if (isImpossiblePanLeft || isImpossiblePanRight) return;
+
+    const isRequiredPanLeft = cameraLeftSide <= gameBoxLeftSide;
+    const isRequiredPanRight = cameraRightSide >= gameBoxRightSide;
+    if (isRequiredPanLeft || isRequiredPanRight) {
       this.camera.move -= player.velocity.x;
       this.box.pos.x -= this.camera.move;
     }
@@ -78,9 +81,13 @@ export default class Game {
 
   drawPlayerLives(ctx) {
     const distanceBetweenImages = 10;
+    const drawOffset = {
+      x: 50,
+      y: 30,
+    };
     const drawPos = {
-      x: this.box.pos.x + 50,
-      y: this.box.pos.y + 30,
+      x: this.box.pos.x + drawOffset.x,
+      y: this.box.pos.y + drawOffset.y,
     }
 
     for (let i = 0; i < this.player.lives; i++) {

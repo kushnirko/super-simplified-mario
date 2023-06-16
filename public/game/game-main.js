@@ -26,13 +26,9 @@ window.addEventListener('load', () => {
   const musicOnButton = document.getElementById('musicOnButton');
   musicOnButton.addEventListener('click', () => {
     soundPlayer.play('buttonClick');
-    if (!isMusicOn) {
-      soundPlayer.play('gameInProgress');
-      isMusicOn = true;
-    } else {
-      soundPlayer.pause('gameInProgress');
-      isMusicOn = false;
-    }
+    if (!isMusicOn) soundPlayer.play('gameInProgress');
+    else soundPlayer.pause('gameInProgress');
+    isMusicOn = !isMusicOn;
   });
 
   const gamePauseWindow = document.getElementById('gamePauseWindow');
@@ -100,7 +96,9 @@ window.addEventListener('load', () => {
       ctx.clearRect(game.box.pos.x, game.box.pos.y, game.box.width, game.box.height);
       game.update(delay, input.keys);
       game.draw(ctx);
-    } else updateTimer += delay;
+    } else {
+      updateTimer += delay;
+    }
     if (game.state === 'gameInProgress') {
       animationID = requestAnimationFrame(animate);
     } else {

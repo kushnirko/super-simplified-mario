@@ -1,5 +1,7 @@
 class State {
   constructor(player, stateData) {
+    this.half = 0.5;
+    this.quarter = 0.25;
     this.player = player;
     this.name = '';
     this.maxFrameIndex = stateData.maxFrame - 1;
@@ -20,49 +22,57 @@ class State {
   }
 
   handleBlockCollision() {
-    const collisions =  this.player.detectCollisions(this.player.tile.blocks);
-    for (const side of collisions.sides)
-      if (this.blockResponse.has(side))
-        this.player.stateMachine.setState(this.blockResponse.get(side));
+    const { player } = this;
+    const collisions = player.detectCollisions(player.tile.blocks);
+    for (const side of collisions.sides) {
+      if (this.blockResponse.has(side)) {
+        player.stateMachine.setState(this.blockResponse.get(side));
+      }
+    }
   }
 
   handleEnemyCollision() {
-    const collisions = this.player.detectCollisions(this.player.tile.enemies);
+    const { player } = this;
+    const collisions = player.detectCollisions(player.tile.enemies);
     if (!collisions.sides.includes('none')) {
       for (let i = 0; i < collisions.sides.length; i++) {
         if (collisions.sides[i] === 'bottom' &&
             collisions.objects[i].lives !== Infinity) {
           this.playSound('kick');
-          collisions.objects[i].lives -= this.player.damage;
-          const kickInertia = this.player.maxVelocity.y * 0.25;
-          this.player.velocity.y -= kickInertia;
+          collisions.objects[i].lives -= player.damage;
+          const kickInertia = player.maxVelocity.y * this.quarter;
+          player.velocity.y -= kickInertia;
         } else {
-          this.player.lives -= collisions.objects[i].damage;
-          this.player.stateMachine.setState(this.damageResponse);
+          player.lives -= collisions.objects[i].damage;
+          player.stateMachine.setState(this.damageResponse);
         }
       }
     }
   }
 
   handleInteractItemCollision() {
-    const collisions = this.player.detectCollisions(this.player.tile.interactObjs);
-    if (!collisions.sides.includes('none'))
-      for (let i = 0; i < collisions.sides.length; i++)
-        collisions.objects[i].interact(collisions.sides[i], this.player.setProps());
+    const { player } = this;
+    const collisions = player.detectCollisions(player.tile.interactObjs);
+    if (!collisions.sides.includes('none')) {
+      for (let i = 0; i < collisions.sides.length; i++) {
+        collisions.objects[i].interact(collisions.sides[i], player.setProps());
+      }
+    }
   }
 
   handleInput(input) {
     let response = this.inputResponse.get('None');
-    for (const key of input)
-      if (this.inputResponse.has(key))
+    for (const key of input) {
+      if (this.inputResponse.has(key)) {
         response = this.inputResponse.get(key);
+      }
+    }
+    const { player } = this;
     if (response.nextStateName !== this.name) {
-      this.player.stateMachine.setState(response.nextStateName);
+      player.stateMachine.setState(response.nextStateName);
     } else {
-      if (response.hasOwnProperty('vx'))
-        this.player.velocity.x = response.vx;
-      if (response.hasOwnProperty('vy'))
-        this.player.velocity.y = response.vy;
+      if (response.hasOwnProperty('vx')) player.velocity.x = response.vx;
+      if (response.hasOwnProperty('vy')) player.velocity.y = response.vy;
     }
   }
 
@@ -120,7 +130,7 @@ class RunningRight extends State {
     this.inputResponse.set('ArrowUp',    { nextStateName: 'jumpingRight' });
     this.inputResponse.set('ArrowRight', {
       nextStateName: 'runningRight',
-      vx: this.player.maxVelocity.x * 0.5,
+      vx: this.player.maxVelocity.x * this.half,
       vy: 0,
     });
     this.inputResponse.set('ArrowLeft',  { nextStateName: 'runningLeft' });
@@ -141,7 +151,7 @@ class RunningLeft extends State {
     this.inputResponse.set('ArrowRight', { nextStateName: 'runningRight' });
     this.inputResponse.set('ArrowLeft',  {
       nextStateName: 'runningLeft',
-      vx: this.player.maxVelocity.x * -0.5,
+      vx: this.player.maxVelocity.x * -this.half,
       vy: 0,
     });
 
@@ -162,7 +172,7 @@ class JumpingRight extends State {
     });
     this.inputResponse.set('ArrowRight', {
       nextStateName: 'jumpingRight',
-      vx: this.player.maxVelocity.x * 0.5,
+      vx: this.player.maxVelocity.x * this.half,
     });
     this.inputResponse.set('ArrowLeft', { nextStateName: 'jumpingLeft' });
 
@@ -170,9 +180,11 @@ class JumpingRight extends State {
   }
 
   handleBlockCollision() {
-    const collisions =  this.player.detectCollisions(this.player.tile.blocks);
-    if (collisions.sides.includes('bottom'))
-      this.player.velocity.y -= this.player.maxVelocity.y * 0.5;
+    const { player } = this;
+    const collisions =  player.detectCollisions(player.tile.blocks);
+    if (collisions.sides.includes('bottom')) {
+      player.velocity.y -= player.maxVelocity.y * this.half;
+    }
   }
 
   changeOnce() {
@@ -180,8 +192,9 @@ class JumpingRight extends State {
   }
 
   changeConstantly() {
-    if (this.player.velocity.y > this.player.gravity)
-      this.player.stateMachine.setState('fallingRight');
+    const { player } = this;
+    const isMaxJumpPoint = player.velocity.y > player.gravity;
+    if (isMaxJumpPoint) player.stateMachine.setState('fallingRight');
   }
 }
 
@@ -197,16 +210,18 @@ class JumpingLeft extends State {
     this.inputResponse.set('ArrowRight', { nextStateName: 'jumpingRight' });
     this.inputResponse.set('ArrowLeft', {
       nextStateName: 'jumpingLeft',
-      vx: this.player.maxVelocity.x * -0.5,
+      vx: this.player.maxVelocity.x * -this.half,
     });
 
     this.damageResponse = 'damageGettingLeft';
   }
 
   handleBlockCollision() {
-    const collisions =  this.player.detectCollisions(this.player.tile.blocks);
-    if (collisions.sides.includes('bottom'))
-      this.player.velocity.y -= this.player.maxVelocity.y * 0.5;
+    const { player } = this;
+    const collisions =  player.detectCollisions(player.tile.blocks);
+    if (collisions.sides.includes('bottom')) {
+      player.velocity.y -= player.maxVelocity.y * this.half;
+    }
   }
 
   changeOnce() {
@@ -214,8 +229,9 @@ class JumpingLeft extends State {
   }
 
   changeConstantly() {
-    if (this.player.velocity.y > this.player.gravity)
+    if (this.player.velocity.y > this.player.gravity) {
       this.player.stateMachine.setState('fallingLeft');
+    }
   }
 }
 
@@ -230,7 +246,7 @@ class FallingRight extends State {
     });
     this.inputResponse.set('ArrowRight', {
       nextStateName: 'fallingRight',
-      vx: this.player.maxVelocity.x * 0.5,
+      vx: this.player.maxVelocity.x * this.half,
     });
     this.inputResponse.set('ArrowLeft', { nextStateName: 'fallingLeft' });
 
@@ -252,7 +268,7 @@ class FallingLeft extends State {
     this.inputResponse.set('ArrowRight', { nextStateName: 'fallingRight' });
     this.inputResponse.set('ArrowLeft', {
       nextStateName: 'fallingLeft',
-      vx: this.player.maxVelocity.x * -0.5,
+      vx: this.player.maxVelocity.x * -this.half,
     });
 
     this.blockResponse.set('bottom', 'standingLeft');
@@ -272,19 +288,22 @@ class DamageGettingRight extends State {
   }
 
   handleBlockCollision() {
-    const collisions =  this.player.detectCollisions(this.player.tile.blocks);
-    if (!collisions.sides.includes('none'))
-      this.player.stateMachine.setState('standingRight');
+    const { player } = this;
+    const collisions =  player.detectCollisions(player.tile.blocks);
+    if (!collisions.sides.includes('none')) {
+      player.stateMachine.setState('standingRight');
+    }
   }
 
   changeOnce() {
+    const { player } = this;
     this.playSound('lostLife');
     const damageGettingInertia = {
-      x: -this.player.maxVelocity.x * 0.5,
-      y: -this.player.maxVelocity.y * 0.5,
+      x: -player.maxVelocity.x * this.half,
+      y: -player.maxVelocity.y * this.half,
     }
-    this.player.velocity.x = damageGettingInertia.x;
-    this.player.velocity.y = damageGettingInertia.y;
+    player.velocity.x = damageGettingInertia.x;
+    player.velocity.y = damageGettingInertia.y;
   }
 }
 
@@ -299,19 +318,22 @@ class DamageGettingLeft extends State {
   }
 
   handleBlockCollision() {
-    const collisions =  this.player.detectCollisions(this.player.tile.blocks);
-    if (!collisions.sides.includes('none'))
-      this.player.stateMachine.setState('standingLeft');
+    const { player } = this;
+    const collisions =  player.detectCollisions(player.tile.blocks);
+    if (!collisions.sides.includes('none')) {
+      player.stateMachine.setState('standingLeft');
+    }
   }
 
   changeOnce() {
     this.playSound('lostLife');
+    const { player } = this;
     const damageGettingInertia = {
-      x: this.player.maxVelocity.x * 0.5,
-      y: -this.player.maxVelocity.y * 0.5,
+      x: player.maxVelocity.x * this.half,
+      y: -player.maxVelocity.y * this.half,
     }
-    this.player.velocity.x = damageGettingInertia.x;
-    this.player.velocity.y = damageGettingInertia.y;
+    player.velocity.x = damageGettingInertia.x;
+    player.velocity.y = damageGettingInertia.y;
   }
 }
 

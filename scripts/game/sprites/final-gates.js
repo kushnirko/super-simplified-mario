@@ -31,32 +31,31 @@ export default class FinalGates {
   }
 
   update() {
-    if (this.gatesBox.pos.x === 0 ||
-        this.gatesBox.pos.y === 0) {
-      this.gatesBox.pos.x = this.stageBox.pos.x;
-      this.gatesBox.pos.y = this.stageBox.pos.y;
-      this.stageBox.pos.x += this.stageDrawOffsetX;
-      this.stageBox.pos.y += this.borderOfMoves;
+    const { gatesBox, stageBox } = this;
+    if (gatesBox.pos.x === 0 || gatesBox.pos.y === 0) {
+      gatesBox.pos.x = stageBox.pos.x;
+      gatesBox.pos.y = stageBox.pos.y;
+      stageBox.pos.x += this.stageDrawOffsetX;
+      stageBox.pos.y += this.borderOfMoves;
     }
-    const stageTop = this.stageBox.pos.y;
-    const stageBottom = stageTop + this.stageBox.height;
-    const gatesTop = this.gatesBox.pos.y;
-    const gatesBottom = gatesTop + this.gatesBox.height;
-    if (stageTop < gatesTop + this.borderOfMoves ||
-        stageBottom > gatesBottom - this.borderOfMoves)
-      this.speed *= -1;
-    this.stageBox.pos.y += this.speed;
+    const stageTop = stageBox.pos.y;
+    const stageBottom = stageTop + stageBox.height;
+    const gatesTop = gatesBox.pos.y;
+    const gatesBottom = gatesTop + gatesBox.height;
+
+    const isStageInMinPos = stageBottom > gatesBottom - this.borderOfMoves;
+    const isStageInMaxPos = stageTop < gatesTop + this.borderOfMoves;
+    if (isStageInMinPos || isStageInMaxPos) this.speed *= -1;
+    stageBox.pos.y += this.speed;
   }
 
   draw(ctx) {
     const { stageBox, gatesBox } = this;
-    ctx.drawImage(
-      this.gatesImage,
+    ctx.drawImage(this.gatesImage,
       0, 0, gatesBox.width, gatesBox.height,
       gatesBox.pos.x, gatesBox.pos.y, gatesBox.width, gatesBox.height
     );
-    ctx.drawImage(
-      this.stageImage,
+    ctx.drawImage(this.stageImage,
       0, 0, stageBox.width, stageBox.height,
       stageBox.pos.x, stageBox.pos.y, stageBox.width, stageBox.height
     );

@@ -43,8 +43,9 @@ export default class Sprite {
   }
 
   isNearMapEnd() {
-    return this.box.pos.x + this.box.width + this.velocity.x >=
-        this.tile.box.width * this.tilesNumber;
+    const currentPosX = this.box.pos.x + this.box.width + this.velocity.x;
+    const maxPosX = this.tile.box.width * this.tilesNumber;
+    return currentPosX >= maxPosX;
   }
 
   isUnderMapBottom() {

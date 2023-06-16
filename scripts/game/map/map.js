@@ -84,7 +84,10 @@ export default class GameMap {
     this.cellSize = 64;
     this.tileWidth = 0;
     this.tileHeight = 0;
-    const layers = levels[this.levelIndex].get('bgLayers').map((name) => layersSrc[name]);
+    const layers = [];
+    for (const name of levels[this.levelIndex].get('bgLayers')) {
+      layers.push(layersSrc[name]);
+    }
     this.background = new Background(layers);
     this.mapContent = {
       blocks: Object.keys(blocksSrc).map((key) => ({
@@ -122,42 +125,52 @@ export default class GameMap {
     this.tileWidth = tileCols * this.cellSize;
     this.tileHeight = tileRows * this.cellSize;
 
-    for (const tile of levelArray) {
-      const tilePosX = this.tileWidth * this.tilesNumber;
-      this.tiles.push(new Tile(this.tileWidth, this.tileHeight));
-      this.tiles[this.tilesNumber].box.pos.x = tilePosX;
-      for (let i = 0; i < tileRows; i++) {
-        for (let j = 0; j < tileCols; j++) {
-          for (const obj of mapObjs) {
-            if (isInRange(decoding[obj], tile[i][j])) {
-              let newObj, objIndex;
-              if (obj === 'blocks') {
-                objIndex = Math.floor((tile[i][j] - decoding.blocks.min) / 10);
-                const objState = tile[i][j] % 10;
-                const { reference, src } = this.mapContent[obj][objIndex];
-                newObj = new reference(src);
-                newObj.state = objState;
-              } else {
-                objIndex = tile[i][j] - decoding[obj].min;
-                const { reference, src } = this.mapContent[obj][objIndex];
-                newObj = new reference(this.tilesNumber, src);
-              }
-              newObj.box.pos.x = tilePosX + j * this.cellSize;
-              newObj.box.pos.y = i * this.cellSize;
-              this.tiles[this.tilesNumber][obj].push(newObj);
-            }
+    const getObjFromEncoding = (objEncoding, tilePosX, row, col) => {
+      for (const obj of mapObjs) {
+        if (isInRange(decoding[obj], objEncoding)) {
+          let newObj, objIndex;
+          if (obj === 'blocks') {
+            objIndex = Math.floor((objEncoding - decoding.blocks.min) / 10);
+            const objState = objEncoding % 10;
+            const { reference, src } = this.mapContent[obj][objIndex];
+            newObj = new reference(src);
+            newObj.state = objState;
+          } else {
+            objIndex = objEncoding - decoding[obj].min;
+            const { reference, src } = this.mapContent[obj][objIndex];
+            newObj = new reference(this.tilesNumber, src);
           }
+          newObj.box.pos.x = tilePosX + col * this.cellSize;
+          newObj.box.pos.y = row * this.cellSize;
+          this.tiles[this.tilesNumber][obj].push(newObj);
         }
       }
-      const currentTile = this.tiles[this.tilesNumber];
-      currentTile.interactObjs = currentTile.enemyVisibleObjs.concat(
-        currentTile.enemyInvisibleObjs
-      );
-      currentTile.enemyObjs = currentTile.blocks.concat(
-        currentTile.enemyVisibleObjs
-      );
-      this.tilesNumber++;
-    }
+    };
+    const handleTileCells = (tile, tilePosX) => {
+      for (let i = 0; i < tileRows; i++) {
+        for (let j = 0; j < tileCols; j++) {
+          getObjFromEncoding(tile[i][j], tilePosX, i, j);
+        }
+      }
+    };
+    const handleTiles = () => {
+      for (const tile of levelArray) {
+        const tilePosX = this.tileWidth * this.tilesNumber;
+        this.tiles.push(new Tile(this.tileWidth, this.tileHeight));
+        this.tiles[this.tilesNumber].box.pos.x = tilePosX;
+        handleTileCells(tile, tilePosX);
+        const currentTile = this.tiles[this.tilesNumber];
+        currentTile.interactObjs = currentTile.enemyVisibleObjs.concat(
+          currentTile.enemyInvisibleObjs
+        );
+        currentTile.enemyObjs = currentTile.blocks.concat(
+          currentTile.enemyVisibleObjs
+        );
+        this.tilesNumber++;
+      }
+    };
+    handleTiles();
+
     this.currentTile = this.tiles[this.currentTileIndex];
     this.visibleTiles.push(this.currentTile);
     this.visibleTiles.push(this.tiles[this.currentTileIndex + 1]);
