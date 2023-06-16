@@ -84,9 +84,8 @@ export default class GameMap {
     this.cellSize = 64;
     this.tileWidth = 0;
     this.tileHeight = 0;
-    this.background = new Background(
-      levels[this.levelIndex].get('bgLayers').map((name) => layersSrc[name])
-    );
+    const layers = levels[this.levelIndex].get('bgLayers').map((name) => layersSrc[name]);
+    this.background = new Background(layers);
     this.mapContent = {
       blocks: Object.keys(blocksSrc).map((key) => ({
         reference: Block,
