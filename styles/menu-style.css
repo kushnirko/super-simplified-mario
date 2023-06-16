@@ -1,0 +1,40 @@
+@import url("https://fonts.cdnfonts.com/css/super-mario-256");
+
+.gameLogo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+}
+
+.playButton {
+    display: grid;
+    place-items: center;
+    position: absolute;
+    width: 250px;
+    height: 80px;
+    border: none;
+    cursor: pointer;
+    top: 75%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50px;
+    background-color: rgb(32, 226, 86);
+    font-family: "Super Mario 256", sans-serif;
+    font-size: 40px;
+    color: white;
+    animation: resizeButton 2s infinite alternate;
+}
+
+@keyframes resizeButton {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1.5);
+    }
+}

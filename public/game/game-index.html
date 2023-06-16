@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewpoint" content="width=device-width, initial-scale=0">
+    <title>Super Simplified Mario</title>
+    <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/super-mario-256">
+    <link rel="stylesheet" href="../../styles/game-style.css">
+</head>
+<body>
+    <canvas id="canvas1"></canvas>
+
+    <div class="images">
+        <img id="miniMario"
+             src="../../media/spritesheets/mini-mario.png"
+             alt="player spritesheet">
+        <img id="playerHeart"
+             src="../../media/textures/player-heart.png"
+             alt="a picture showing the player's lives count">
+        <img id="soilGrass"
+             src="../../media/textures/soil-grass.png"
+             alt="soil and grass block">
+        <img id="stone"
+             src="../../media/textures/stone.png"
+             alt="stone block">
+        <img id="singleStone"
+             src="../../media/textures/single-stone.png"
+             alt="single stone block">
+        <img id="singleBricks"
+             src="../../media/textures/single-bricks.png"
+             alt="single bricks block">
+        <img id="cloudsLayer"
+             src="../../media/textures/clouds-layer.png"
+             alt="clouds background layer">
+        <img id="largeCloudsLayer"
+             src="../../media/textures/large_clouds.png"
+             alt="large clouds background layer">
+        <img id="skyLayer"
+             src="../../media/textures/sky-layer.png"
+             alt="sky background layer">
+        <img id="rex"
+             src="../../media/spritesheets/rex.png"
+             alt="enemy rex">
+        <img id="finalGates"
+             src="../../media/textures/final-gates.png"
+             alt="final gates">
+        <img id="finalGatesStage"
+             src="../../media/textures/final-gates-stage.png"
+             alt="final gates stage">
+    </div>
+
+    <div class="audios">
+        <audio id="kick" src="../../media/sounds/kick.wav"></audio>
+        <audio id="jump" src="../../media/sounds/jump.wav"></audio>
+        <audio id="spinJump" src="../../media/sounds/spin-jump.wav"></audio>
+        <audio id="pause" src="../../media/sounds/pause.wav"></audio>
+        <audio id="lostLife" src="../../media/sounds/lost-life.wav"></audio>
+        <audio id="buttonClick" src="../../media/sounds/button-click.wav"></audio>
+        <audio id="gameWinSound" src="../../media/sounds/game-win.wav"></audio>
+        <audio id="gameOverSound" src="../../media/sounds/game-over.wav"></audio>
+        <audio autoplay loop id="gameSoundtrack" src="../../media/sounds/game-soundtrack.wav"></audio>
+    </div>
+
+    <button id="musicOnButton" class="musicOnButton"></button>
+
+    <button id="gamePauseButton" class="gamePauseButton"></button>
+
+    <div id="gamePauseWindow" class="gamePauseWindow">
+        <div class="gamePauseContent">
+            <h2>
+                PAUSE
+            </h2>
+            <button id="pauseBackButton" class="pauseBackButton">
+                BACK
+            </button>
+            <button id="pauseRetryButton" class="pauseRetryButton">
+                RETRY
+            </button>
+            <button id="pauseExitButton" class="pauseExitButton"
+                    data-href="../level-selector/level-selector-index.html">
+                EXIT
+            </button>
+        </div>
+    </div>
+
+    <div id="gameWinWindow" class="gameWinWindow">
+        <div class="gameWinContent">
+            <h1>
+                YOU WON!
+            </h1>
+            <button id="gameWinExitButton" class="gameWinExitButton"
+                    data-href="../level-selector/level-selector-index.html">
+                GO TO LEVELS
+            </button>
+        </div>
+    </div>
+
+    <div id="gameOverWindow" class="gameOverWindow">
+        <div class="gameOverContent">
+            <h1>
+                YOU LOST!
+            </h1>
+            <button id="gameOverRetryButton" class="gameOverRetryButton">
+                RETRY
+            </button>
+            <button id="gameOverExitButton" class="gameOverExitButton"
+                    data-href="../level-selector/level-selector-index.html">
+                GO TO LEVELS
+            </button>
+        </div>
+    </div>
+
+    <script type="module" src="game-main.js"></script>
+</body>
+</html>
