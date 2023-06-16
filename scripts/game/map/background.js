@@ -12,10 +12,10 @@ class BackgroundLayer {
   }
 
   draw(ctx, tilesNumber) {
+    const { pos: { x, y }, width, height  } = this.box;
     for (let i = 0; i < tilesNumber + 1; i++) {
-      ctx.drawImage(this.image,
-        this.box.pos.x + i * this.box.width, this.box.pos.y,
-        this.box.width, this.box.height);
+      const dx = x + i * width;
+      ctx.drawImage(this.image, dx, y, width, height);
     }
   }
 }
