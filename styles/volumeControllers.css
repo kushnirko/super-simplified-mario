@@ -1,0 +1,22 @@
+.switch.sounds {
+    margin: 15px;
+
+}
+
+.switch.music {
+    margin: 15px;
+}
+
+.switch.sounds .slider:before {
+    background-image: url("../media/icons/silent-mode-icon.png");
+}
+
+.switch.music .slider:before {
+    background-image: url("../media/icons/music-icon.png");
+}
+
+.volumeControllersContainer {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}

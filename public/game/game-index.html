@@ -6,10 +6,82 @@
     <meta name="viewpoint" content="width=device-width, initial-scale=0">
     <title>Super Simplified Mario</title>
     <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/super-mario-256">
-    <link rel="stylesheet" href="../../styles/game-style.css">
+    <link rel="stylesheet" href="game-style.css">
+    <link rel="stylesheet" href="../../styles/volumeControllers.css">
+    <link rel="stylesheet" href="../../styles/switch.css">
 </head>
 <body>
     <canvas id="canvas1"></canvas>
+
+    <button id="gamePauseButton" class="gamePauseButton"></button>
+
+    <div class="volumeControllersContainer">
+        <label class="switch sounds">
+            <input id="toggleSounds" type="checkbox">
+            <span class="slider"></span>
+        </label>
+
+        <label class="switch music">
+            <input id="toggleMusic" type="checkbox">
+            <span class="slider"></span>
+        </label>
+    </div>
+
+    <div id="gamePauseDialog" class="dialog pause">
+        <div class="gamePauseContent">
+            <h2>
+                PAUSE
+            </h2>
+            <button id="pauseBackButton" class="pauseBackButton">
+                BACK
+            </button>
+            <button id="pauseRetryButton" class="pauseRetryButton">
+                RETRY
+            </button>
+            <button id="pauseExitButton" class="pauseExitButton"
+                    data-href="../level-selector/level-selector-index.html">
+                EXIT
+            </button>
+        </div>
+    </div>
+
+    <p id="gameTime" class="text gameTime">
+        TIME
+    </p>
+
+    <p id="gameScore" class="text gameScore">
+        SCORE
+    </p>
+
+    <div id="gameWinDialog" class="dialog gameWin">
+        <div class="gameWinContent">
+            <h1>
+                YOU WON!
+            </h1>
+            <p id="gameTotalScore" class="text gameTotalScore">
+                TOTAL SCORE
+            </p>
+            <button id="gameWinExitButton" class="gameWinExitButton"
+                    data-href="../level-selector/level-selector-index.html">
+                GO TO LEVELS
+            </button>
+        </div>
+    </div>
+
+    <div id="gameOverDialog" class="dialog gameOver">
+        <div class="gameOverContent">
+            <h1>
+                YOU LOST!
+            </h1>
+            <button id="gameOverRetryButton" class="gameOverRetryButton">
+                RETRY
+            </button>
+            <button id="gameOverExitButton" class="gameOverExitButton"
+                    data-href="../level-selector/level-selector-index.html">
+                GO TO LEVELS
+            </button>
+        </div>
+    </div>
 
     <div class="images">
         <img id="miniMario"
@@ -60,55 +132,6 @@
         <audio id="gameWinSound" src="../../media/sounds/game-win.wav"></audio>
         <audio id="gameOverSound" src="../../media/sounds/game-over.wav"></audio>
         <audio autoplay loop id="gameSoundtrack" src="../../media/sounds/game-soundtrack.wav"></audio>
-    </div>
-
-    <button id="musicOnButton" class="musicOnButton"></button>
-
-    <button id="gamePauseButton" class="gamePauseButton"></button>
-
-    <div id="gamePauseWindow" class="gamePauseWindow">
-        <div class="gamePauseContent">
-            <h2>
-                PAUSE
-            </h2>
-            <button id="pauseBackButton" class="pauseBackButton">
-                BACK
-            </button>
-            <button id="pauseRetryButton" class="pauseRetryButton">
-                RETRY
-            </button>
-            <button id="pauseExitButton" class="pauseExitButton"
-                    data-href="../level-selector/level-selector-index.html">
-                EXIT
-            </button>
-        </div>
-    </div>
-
-    <div id="gameWinWindow" class="gameWinWindow">
-        <div class="gameWinContent">
-            <h1>
-                YOU WON!
-            </h1>
-            <button id="gameWinExitButton" class="gameWinExitButton"
-                    data-href="../level-selector/level-selector-index.html">
-                GO TO LEVELS
-            </button>
-        </div>
-    </div>
-
-    <div id="gameOverWindow" class="gameOverWindow">
-        <div class="gameOverContent">
-            <h1>
-                YOU LOST!
-            </h1>
-            <button id="gameOverRetryButton" class="gameOverRetryButton">
-                RETRY
-            </button>
-            <button id="gameOverExitButton" class="gameOverExitButton"
-                    data-href="../level-selector/level-selector-index.html">
-                GO TO LEVELS
-            </button>
-        </div>
     </div>
 
     <script type="module" src="game-main.js"></script>

@@ -5,15 +5,38 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Super Simplified Mario</title>
     <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/super-mario-256">
-    <link rel="stylesheet" href="../../styles/menu-style.css">
+    <link rel="stylesheet" href="menu-style.css">
+    <link rel="stylesheet" href="../../styles/volumeControllers.css">
+    <link rel="stylesheet" href="../../styles/switch.css">
 </head>
 <body>
     <img id="gameLogo" class="gameLogo" src="../../media/icons/game-logo.png" alt="game logo">
+
+    <div class="volumeControllersContainer">
+        <label class="switch sounds">
+            <input id="toggleSounds" type="checkbox">
+            <span class="slider"></span>
+        </label>
+
+        <label class="switch music">
+            <input id="toggleMusic" type="checkbox">
+            <span id="switchMusicSlider" class="slider"></span>
+        </label>
+    </div>
+
+    <p id="todayMaxScore" class="text todayMaxScore">
+        TODAY'S MAX SCORE
+    </p>
 
     <button id="playButton" class="playButton" data-href="../level-selector/level-selector-index.html">
         PLAY
     </button>
 
-    <script src="menu-main.js"></script>
+    <div class="audios">
+        <audio id="buttonClick" src="../../media/sounds/button-click.wav"></audio>
+        <audio autoplay loop id="gameSoundtrack" src="../../media/sounds/game-soundtrack.wav"></audio>
+    </div>
+
+    <script type="module" src="menu-main.js"></script>
 </body>
 </html>

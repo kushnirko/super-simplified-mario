@@ -1,8 +1,3 @@
-'use strict';
+import MenuPage from '../../lib/app/menu-page/menu-page.js';
 
-window.addEventListener('load', () => {
-  const playButton = document.getElementById('playButton');
-  playButton.addEventListener('click', () => (
-    window.location.href = playButton.getAttribute('data-href')
-  ));
-});
+window.addEventListener('load', () => new MenuPage());

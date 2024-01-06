@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Super Simplified Mario</title>
     <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/super-mario-256">
-    <link rel="stylesheet" href="../../styles/level-selector-style.css">
+    <link rel="stylesheet" href="level-selector-style.css">
 </head>
 <body>
     <div class="heading">
@@ -18,9 +18,14 @@
     </button>
 
     <div class="levelButtons">
-        <button id="level1Button" class="level1Button" data-href="../game/game-index.html">
+        <button id="level1Button" class="level1Button" data-href="../game/game-index.html?level=1">
             1
         </button>
+    </div>
+
+    <div class="audios">
+        <audio id="buttonClick" src="../../media/sounds/button-click.wav"></audio>
+        <audio autoplay loop id="gameSoundtrack" src="../../media/sounds/game-soundtrack.wav"></audio>
     </div>
 
     <script type="module" src="level-selector-main.js"></script>

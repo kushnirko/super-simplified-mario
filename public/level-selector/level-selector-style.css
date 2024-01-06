@@ -1,0 +1,70 @@
+@import url("https://fonts.cdnfonts.com/css/super-mario-256");
+
+.heading {
+    position: fixed;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    font-family: "Super Mario 256", sans-serif;
+    font-size: 45px;
+}
+
+.homeButton {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    display: grid;
+    position: absolute;
+    cursor: pointer;
+    width: 100px;
+    height: 60px;
+    top: 30px;
+    left: 90px;
+    transform: translate(-50%, 0);
+    border: none;
+    border-radius: 10px;
+    font-family: "Super Mario 256", sans-serif;
+    font-size: 15px;
+    background-color: rgb(242, 0, 0);
+    color: white;
+}
+
+.homeButton:hover {
+    box-shadow: 10px 5px 5px rgba(0, 0, 0, 0.3);
+}
+
+.homeButton:active {
+    background-color: rgb(173, 17, 17);
+}
+
+.levelButtons button {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    display: grid;
+    position: absolute;
+    cursor: pointer;
+    width: 200px;
+    height: 200px;
+    border: none;
+    border-radius: 30px;
+    font-family: "Super Mario 256", sans-serif;
+    font-size: 60px;
+    color: white;
+}
+
+.levelButtons button:hover {
+    box-shadow: 10px 5px 5px rgba(0, 0, 0, 0.3);
+}
+
+.level1Button {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(0, 0, 242);
+}
+
+.level1Button:active {
+    background-color: rgb(17, 17, 173);
+}
